@@ -31,6 +31,7 @@ class ViewController: UIViewController {
         ]
         
         checkbox = UICheckbox(items: sample)
+        
         checkbox.embedInContainer(container: self.view)
     }
 
