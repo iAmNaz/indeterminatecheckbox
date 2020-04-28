@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="RootCheckBoxItemTableViewCell" id="KGk-i7-Jjw" customClass="RootCheckBoxItemTableViewCell" customModule="Indeteminate" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6lQ-B8-X5B">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pK9-rf-77x">
+                                <rect key="frame" x="41" y="4" width="279" height="36"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
+                                <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RBF-gY-jFZ">
+                                <rect key="frame" x="0.0" y="0.0" width="41" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="41" id="ce6-Uo-0Sr"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" image="checkbox-default">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <state key="selected" image="checkbox-checked"/>
+                                <connections>
+                                    <action selector="buttonAction:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Dhv-SB-eRq"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="pK9-rf-77x" secondAttribute="bottom" constant="4" id="3Ah-Gw-WZI"/>
+                            <constraint firstItem="RBF-gY-jFZ" firstAttribute="bottom" secondItem="voE-yf-Qu3" secondAttribute="bottom" id="8jS-XM-DYT"/>
+                            <constraint firstItem="pK9-rf-77x" firstAttribute="top" secondItem="6lQ-B8-X5B" secondAttribute="top" constant="4" id="Ezj-0r-z6L"/>
+                            <constraint firstAttribute="trailing" secondItem="pK9-rf-77x" secondAttribute="trailing" id="T42-qP-zUN"/>
+                            <constraint firstItem="pK9-rf-77x" firstAttribute="leading" secondItem="RBF-gY-jFZ" secondAttribute="trailing" id="VZC-Iu-0vZ"/>
+                            <constraint firstItem="RBF-gY-jFZ" firstAttribute="leading" secondItem="6lQ-B8-X5B" secondAttribute="leading" id="mUK-d8-QJg"/>
+                            <constraint firstItem="RBF-gY-jFZ" firstAttribute="top" secondItem="6lQ-B8-X5B" secondAttribute="top" id="o3w-8f-RoY"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="voE-yf-Qu3"/>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="6lQ-B8-X5B" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="UJs-Ki-3dc"/>
+                    <constraint firstItem="6lQ-B8-X5B" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Vcq-gg-6Vo"/>
+                    <constraint firstAttribute="trailing" secondItem="6lQ-B8-X5B" secondAttribute="trailing" id="skq-CF-bGo"/>
+                    <constraint firstAttribute="bottom" secondItem="6lQ-B8-X5B" secondAttribute="bottom" id="wFs-lE-MY9"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="button" destination="RBF-gY-jFZ" id="yUQ-cz-RvL"/>
+                <outlet property="label" destination="pK9-rf-77x" id="fO6-cH-ai3"/>
+            </connections>
+            <point key="canvasLocation" x="137.68115942028987" y="125.89285714285714"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="checkbox-checked" width="20" height="20"/>
+        <image name="checkbox-default" width="20" height="20"/>
+    </resources>
+</document>
