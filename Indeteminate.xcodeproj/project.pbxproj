@@ -198,16 +198,24 @@
 		457251A22458B9E6006FCEAA /* UICheckbox */ = {
 			isa = PBXGroup;
 			children = (
-				45725193245870FD006FCEAA /* UIKit+Extensions.swift */,
-				45725195245872A0006FCEAA /* Row.swift */,
-				452B2051245866CD0054F952 /* Protocols.swift */,
 				4572519124586DA9006FCEAA /* UICheckbox.swift */,
-				457251A02458AFF1006FCEAA /* DefaultCheckboxStyle.swift */,
-				452B2042245865900054F952 /* MultiLevelList.swift */,
-				457251A32458BDE9006FCEAA /* MultiLevelList+Extensions.swift */,
+				45C1160524591E2200D9025F /* Support */,
 				452B2050245866A50054F952 /* TableViewCells */,
 			);
 			path = UICheckbox;
+			sourceTree = "<group>";
+		};
+		45C1160524591E2200D9025F /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				45725193245870FD006FCEAA /* UIKit+Extensions.swift */,
+				45725195245872A0006FCEAA /* Row.swift */,
+				452B2051245866CD0054F952 /* Protocols.swift */,
+				457251A02458AFF1006FCEAA /* DefaultCheckboxStyle.swift */,
+				452B2042245865900054F952 /* MultiLevelList.swift */,
+				457251A32458BDE9006FCEAA /* MultiLevelList+Extensions.swift */,
+			);
+			path = Support;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
