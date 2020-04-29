@@ -21,11 +21,34 @@ class MultiLevelList<T> where T:Labelable {
     
     var root: Node!
     
-    lazy var store = Set<AnyCancellable>()
+    var store = Set<AnyCancellable>()
     
+    /// Use this initializer when node are created externally
     init(title: String) {
         self.root = Node(title: title)
     }
+    
+    /// Use this initializer when you have an array of dictionary data
+    /// and let the list generate the nodes
+    init(title: String, items: [String:[T]]) {
+          
+          self.root = Node(title: title)
+          
+          for dict in items {
+              
+              let key = dict.key
+              
+              let subItems = dict.value
+              
+              let node = Node(title: key)
+    
+              self.root.addChild(child: node)
+              
+              for child in subItems {
+                  node.addChild(child: Node(title: child.title))
+              }
+          }
+      }
     
     func selectAll() {
         root.selectDownStream()
@@ -38,31 +61,17 @@ class MultiLevelList<T> where T:Labelable {
     func debugPrintSelections() {
         root.debugPrintSelections()
     }
-        
-    init(title: String, items: [String:[T]]) {
-        
-        self.root = Node(title: title)
-        
-        for dict in items {
-            
-            let key = dict.key
-            
-            let subItems = dict.value
-            
-            let node = Node(title: key)
-  
-            self.root.addChild(child: node)
-            
-            for child in subItems {
-                node.addChild(child: Node(title: child.title))
-            }
-        }
-    }
 }
 
 class Node {
     
+    /// An obervable property
     @Published var state: SelectionState = .none
+    
+    /// Property to determine if this node has children
+    var isParent: Bool {
+        return childrenNode != nil
+    }
     
     private var level: Int = 0
     private var index: Int = 0
@@ -158,10 +167,6 @@ class Node {
         default:
             state = .indeterminate
         }
-    }
-    
-    var isParent: Bool {
-        return childrenNode != nil
     }
 }
 

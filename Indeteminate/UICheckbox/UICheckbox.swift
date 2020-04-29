@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 /// Table view sections ids
 enum Section: CaseIterable {
@@ -24,27 +25,32 @@ enum ChildVisibility {
 /// that conforms to a few protocols then you are set.
 class UICheckbox<T>: UIView, UITableViewDelegate where T: Labelable {
 
+    var checkBoxItemStyle: CheckBoxStyle = DefaultCheckboxStyle()
+    
+    var selectionObserver = PassthroughSubject<Row, Never>()
+    
+    var state: ChildVisibility = .collapsed
+    
+    private(set) var allRowModels: [Row] = []
+    
     private var list: MultiLevelList<T>!
     private var tableView: UITableView!
     private var dataSource: UITableViewDiffableDataSource<Section, Row>! = nil
     private var currentSnapshot: NSDiffableDataSourceSnapshot<Section, Row>! = nil
-    private var allItems: [Row] = []
+    private var store = Set<AnyCancellable>()
+    private var root:  Row!
     
-    var checkBoxItemStyle: CheckBoxStyle = DefaultCheckboxStyle()
-    
-    var state: ChildVisibility = .collapsed
-    
-    let root = Row(title: "Select All", aClass: RootCheckBoxItemTableViewCell.self)
-    
-    init(items: [String:[T]]) {
+    init(rootItem title: String, items: [String:[T]]) {
         
         super.init(frame: .zero)
         
-        list = MultiLevelList(title: "Select All")
+        root = Row(title: title, aClass: RootCheckBoxItemTableViewCell.self)
+        
+        list = MultiLevelList(title: title)
         
         fillItems(items: items)
         
-        list.customData(rootItem: root, items: allItems)
+        list.customData(rootItem: root, items: allRowModels)
     }
     
     func embedInContainer(container: UIView) {
@@ -81,11 +87,18 @@ class UICheckbox<T>: UIView, UITableViewDelegate where T: Labelable {
                   
         let key = dict.key
           
-            let row = Row(title: key, aClass: ParentCheckboxItemTableViewCell.self)
-            row.children = dict.value.map {
-                Row(title: $0.title, aClass: ChildCheckBoxItemTableViewCell.self)
+            let row = Row(title: key, aClass: ParentCheckboxItemTableViewCell.self, referenceValue: key)
+            
+            row.children = dict.value.map { node in
+                let row = Row(title: node.title, aClass: ChildCheckBoxItemTableViewCell.self, referenceValue: dict.value)
+                row.$isSelected.sink { [weak self] (selected) in
+                    self?.selectionObserver.send(row)
+                }
+                .store(in: &store)
+                
+                return row
             }
-            allItems.append(row)
+            allRowModels.append(row)
         }
     }
     
@@ -127,7 +140,7 @@ class UICheckbox<T>: UIView, UITableViewDelegate where T: Labelable {
     private func updateTable(animated: Bool = false) {
         
         let sections: [Section] = [.primary, .secondary]
-        let sectionData: [Section: [Row]] = [.primary: [root], .secondary: allItems]
+        let sectionData: [Section: [Row]] = [.primary: [root], .secondary: allRowModels]
         
         currentSnapshot = NSDiffableDataSourceSnapshot<Section, Row>()
         currentSnapshot.appendSections(sections)

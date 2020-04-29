@@ -11,25 +11,34 @@ import Combine
 
 /// The class for caching all cell row state
 class Row: ReuseIdentifier {
-    var state: ChildVisibility = .collapsed
-    var cellIdentifier: String
-    var identifier = UUID().uuidString
-    var title: String
-    var children: [Row]?
-    var stateReceiver = PassthroughSubject<SelectionState, Never>()
-    var currentState: SelectionState = .none
-    var store = Set<AnyCancellable>()
     
     @Published var selectReceiver: Bool = false
     @Published var isSelected: Bool = false
     
-    init<T>(title: String, aClass: T.Type = T.self) {
+    var cellIdentifier: String
+    var state: ChildVisibility = .collapsed
+    var stateReceiver = PassthroughSubject<SelectionState, Never>()
+    var children: [Row]?
+    
+    private(set) var identifier = UUID().uuidString
+    private(set) var title: String
+    private(set) var currentState: SelectionState = .none
+    fileprivate var store = Set<AnyCancellable>()
+    fileprivate var referenceValue: Any?
+    
+    /// Row's primary initializer
+    /// - Parameter title: The title text of the row
+    /// - Parameter aClass: The tableview cell class for this row
+    /// - Parameter referenceValue: The reference inbound value. It will be sent to the receiver
+    /// when the row is selected
+    init<T>(title: String, aClass: T.Type = T.self, referenceValue: Any? = nil) {
         self.cellIdentifier = String(describing: aClass)
         self.title = title
+        self.referenceValue = referenceValue
         bind()
     }
     
-    func bind() {
+    fileprivate func bind() {
         self.stateReceiver.sink { (state) in
             self.currentState = state
             self.isSelected = state == .selected
@@ -45,5 +54,11 @@ extension Row: Hashable {
     
     static func == (lhs: Row, rhs: Row) -> Bool {
         return lhs.identifier == rhs.identifier
+    }
+}
+
+extension Row: CustomStringConvertible {
+    var description: String {
+        return "\(title) \(isSelected) -> \(referenceValue ?? "")"
     }
 }

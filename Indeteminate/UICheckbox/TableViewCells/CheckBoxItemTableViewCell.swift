@@ -25,7 +25,6 @@ class CheckBoxItemTableViewCell: UITableViewCell, FieldCell {
     
     var model: Row! {
         didSet {
-            
             model.stateReceiver.sink { [weak self] (state) in
                 self?.backgroundColorFor(state)
             }.store(in: &store)

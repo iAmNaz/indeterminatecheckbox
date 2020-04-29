@@ -6,6 +6,8 @@ This project is a demonstration of the check box with indeterminate state. This 
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
 
+![checkbox-demo.git](/Users/nazariomariano/Repos/Practical Tests/abroad-source/Indeteminate/checkbox-demo.git.gif)
+
 #### IDE
 
 The project was created using Xcode 11.4.
@@ -22,17 +24,31 @@ struct Item: Labelable {
 
 The title will be used as the lable of the checkbox items.
 
-Below is an example of how you would create and use an instance of the checkbox view. You can see in the code sample that we have created the data for the checkbox then passed it on the initializer. Then, we called the `embedInContainer(container: self.view)`method to add the view as a subview of any superview and it will automatically setup the autolayout constraints. By now this is ready to be viewed on a simulator.
+Below is an example of how you would create and use an instance of the checkbox view. You can see in the code sample that we have created the data for the checkbox then passed it on the initializer. Then, we called the `embedInContainer(container: self.view)`method to add the view as a subview of any superview and it will automatically setup the autolayout constraints. Optionally you can observe the updates happening in realtime or reach in and read the `allRowModels` array property and read the values. By now this is ready to be viewed in the simulator.
 
 ```swift
-var checkbox: UICheckbox<Item>!
+//1. Create Data
 let sample = [
-            "PARENT1": [Item(title: "item1"), Item(title: "item2")],
-            "PARENT2": [Item(title: "item1"), Item(title: "item2")]
-        ]
-        
-        checkbox = UICheckbox(items: sample)
-        checkbox.embedInContainer(container: self.view)
+    "PARENT1": [Item(title: "item1"), Item(title: "item2")],
+    "PARENT2": [Item(title: "item1"), Item(title: "item2")]
+]
+
+//2. Initialize
+checkbox = UICheckbox(rootItem: NSLocalizedString("Select All", comment: "root itle"), items: sample)
+
+//3. Add to superview
+checkbox.embedInContainer(container: self.view)
+
+//3. Optionally observe for changes
+let cancellable = checkbox.selectionObserver.sink { (row) in
+    print(row)
+}
+
+//4. Make sure the cancellable is cached to make sure 
+//   the observer will receive updates
+cancellables += [
+    cancellable
+]
 ```
 
 #### Checkbox Item Styling
@@ -53,7 +69,7 @@ Once you already have you custom style just set it to the style property of the 
 checkbox.checkBoxItemStyle = CustomCheckboxStyle()
 ```
 
-### Running on the Simulator
+### Running in the Simulator
 
 Open the project in Xcode and select the destination device then click Run.
 
