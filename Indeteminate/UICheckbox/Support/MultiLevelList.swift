@@ -70,13 +70,13 @@ class Node {
     
     /// Property to determine if this node has children
     var isParent: Bool {
-        return childrenNode != nil
+        return childrenNodes != nil
     }
     
     private var level: Int = 0
     private var index: Int = 0
     private var parent: Node?
-    private var childrenNode:[Node]?
+    private var childrenNodes:[Node]?
     private var selected = 0
     private var title: String
     
@@ -85,33 +85,35 @@ class Node {
     }
     
     func addChild(child: Node) {
-        if childrenNode == nil {
-            childrenNode = [Node]()
+        if childrenNodes == nil {
+            childrenNodes = [Node]()
         }
         child.level = level + 1
         child.parent = self
-        child.index = childrenNode!.endIndex
-        childrenNode!.append(child)
+        child.index = childrenNodes!.endIndex
+        childrenNodes!.append(child)
     }
     
     func selectDownStream() {
         parent?.selected = 1
         state = .selected
-        childrenNode?.forEach { node in
+        childrenNodes?.forEach { node in
             node.selected = 1
             node.state = .selected
             node.selectDownStream()
         }
+        parent?.evalSelections()
     }
     
     func deselectDownStream() {
         parent?.selected = 0
         state = .none
-        childrenNode?.forEach { node in
+        childrenNodes?.forEach { node in
             node.selected = 0
             node.state = .none
             node.deselectDownStream()
         }
+        parent?.evalSelections()
     }
     
     func deselect() {
@@ -121,7 +123,7 @@ class Node {
         // Select upstream
         parent?.deselect()
         
-        guard let children = childrenNode else {
+        guard let children = childrenNodes else {
             state = .none
             return
         }
@@ -137,7 +139,7 @@ class Node {
         // Select upstream
         parent?.setSelected()
         
-        guard let children = childrenNode else {
+        guard let children = childrenNodes else {
             state = .selected
             return
         }
@@ -148,8 +150,25 @@ class Node {
     
     func debugPrintSelections() {
         print("\(title) \(state) \(level) \(index)")
-        childrenNode?.forEach {
+        childrenNodes?.forEach {
             $0.debugPrintSelections()
+        }
+    }
+    
+    private func evalSelections() {
+        if let children = self.childrenNodes {
+            let sum = children.reduce(0, { (result, node) -> Int in
+                result + node.selected
+            })
+            
+            switch sum {
+            case 0:
+                state = .none
+            case children.count:
+                state = .selected
+            default:
+                state = .indeterminate
+            }
         }
     }
     
@@ -172,6 +191,6 @@ class Node {
 
 extension Node: CustomStringConvertible {
     var description: String {
-        return "\(title): \(String(describing: childrenNode?.count))"
+        return "\(title): \(String(describing: childrenNodes?.count))"
     }
 }
