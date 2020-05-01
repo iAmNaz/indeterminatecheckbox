@@ -16,15 +16,31 @@ enum SelectionState {
     case indeterminate
 }
 
+/// Encapsulates the on/off value
 struct State {
     static var on = 1
     static var off = 0
 }
 
+/// List item models will conform to this protocol to
+/// be able to interface with the tree
 protocol SelectionReceiver: class {
+    /// A getter method to ask for child models
+    /// - Returns: `SelectionReceiver`
     func childNodes() -> [SelectionReceiver]?
+    
+    /// Implement this method that gets called
+    /// when node state changes comes from the
+    /// tree
+    /// - Parameter state: The incoming state value
     func didChange(state: SelectionState)
+    
+    /// A method to link the row model with a given `Node`
+    /// - Note: The link must be weak to avoid a strong reference cycle
+    /// - Parameter node: A given to pair with
     func link(node: Node)
+    
+    /// An internal debugging info
     var debugDescription: String? { get }
 }
 
@@ -52,30 +68,16 @@ class MultiLevelList<T> where T:Labelable {
             }
         }
     }
-    
-    func selectAll() {
-        root.selectDownStream()
-    }
-    
-    func deselectAll() {
-        root.deselectDownStream()
-    }
-    
-    func debugPrintSelections() {
-        root.debugPrintSelections()
-    }
 }
 
 class Node {
     
-    /// An obervable property
+    /// An obervable property for state changes
     @Published var state: SelectionState = .none
-    
-    /// Property to determine if this node has children
-    var isParent: Bool {
+
+    private var isParent: Bool {
         return childrenNodes != nil
     }
-    
     private var level: Int = 0
     private var index: Int = 0
     private var parent: Node?
@@ -83,11 +85,18 @@ class Node {
     private var selected = State.off
     private weak var weakReceiver: SelectionReceiver?
     
+    /// The primary Initializer for this `Node`
+    ///
+    /// - Note: The node will create weak reference to receivers
+    /// - Parameter data: Any type provided it conforms to the `SelectionReceiver` protocol
     init(data: SelectionReceiver) {
         data.link(node: self)
         self.weakReceiver = data
     }
     
+    /// Method to add children
+    /// - Parameter data: Any type provided it conforms to the `SelectionReceiver` protocol
+    /// - Returns: `Node` object where other objects could pair with
     @discardableResult
     func addChild(data: SelectionReceiver) -> Node {
         
@@ -106,6 +115,8 @@ class Node {
         return child
     }
     
+    /// An extenal object can select a node
+    /// - Parameter isSelected: A boolean value indicating if the node is selected or not
     func select(isSelected: Bool) {
         if isSelected {
             if isParent {
@@ -122,6 +133,7 @@ class Node {
         }
     }
     
+    // MARK: Private
     fileprivate func selectDownStream() {
         childrenNodes?.forEach { node in
             node.setSelected()
@@ -152,6 +164,7 @@ class Node {
         }
     }
     
+    // Scan children for changes
     private func evalChildSelections() {
         if let children = self.childrenNodes {
             let sum = children.reduce(0, { (result, node) -> Int in
@@ -171,7 +184,7 @@ class Node {
         parent?.evalChildSelections()
     }
     
-    func updateState(state: SelectionState) {
+    private func updateState(state: SelectionState) {
         self.state = state
         if state == .selected {
             selected = State.on
