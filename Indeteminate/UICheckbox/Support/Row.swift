@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 /// The class for caching all cell row state
-class Row: ReuseIdentifier {
+class Row: ReuseIdentifier, Labelable {
     
     /// Receives binary selection state from the UI
     @Published var selectReceiver: Bool = false
@@ -27,9 +27,11 @@ class Row: ReuseIdentifier {
     /// A cache that refers to if the child rows are visible or not
     var state: ChildVisibility = .collapsed
    
+    /// Row label
+    var title: String
+    
     private weak var weakNode: Node?
-    private(set) var identifier = UUID().uuidString
-    private(set) var title: String
+    var identifier = UUID().uuidString
     private(set) var currentState: SelectionState = .none
     fileprivate var store = Set<AnyCancellable>()
     fileprivate var referenceValue: Any?
@@ -43,6 +45,15 @@ class Row: ReuseIdentifier {
         self.cellIdentifier = String(describing: aClass)
         self.title = title
         self.referenceValue = referenceValue
+    }
+    
+    /// Alternative initializer which can be useful when testing
+    /// - Parameter id: An id and tile for this row
+    init(id: String) {
+        self.title = id
+        self.identifier = id
+        self.cellIdentifier = ""
+        self.referenceValue = nil
     }
 }
 

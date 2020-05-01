@@ -86,6 +86,7 @@ class UICheckbox<T>: UIView, UITableViewDelegate where T: Labelable {
         let key = dict.key
           
             let row = Row(title: key, aClass: ParentCheckboxItemTableViewCell.self, referenceValue: key)
+            
             self.bindToObserver(row: row)
             
             row.children = dict.value.map { node in

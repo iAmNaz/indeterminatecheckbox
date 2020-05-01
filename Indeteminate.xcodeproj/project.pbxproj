@@ -22,6 +22,7 @@
 		452B204B245866920054F952 /* ChildCheckBoxItemTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 452B2049245866920054F952 /* ChildCheckBoxItemTableViewCell.xib */; };
 		452B2052245866CD0054F952 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452B2051245866CD0054F952 /* Protocols.swift */; };
 		452B205424586B160054F952 /* CheckBoxItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452B205324586B160054F952 /* CheckBoxItemTableViewCell.swift */; };
+		455CB65C245BF75200C4B439 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455CB65B245BF75200C4B439 /* Node.swift */; };
 		4572519224586DA9006FCEAA /* UICheckbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572519124586DA9006FCEAA /* UICheckbox.swift */; };
 		45725194245870FD006FCEAA /* UIKit+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45725193245870FD006FCEAA /* UIKit+Extensions.swift */; };
 		45725196245872A0006FCEAA /* Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45725195245872A0006FCEAA /* Row.swift */; };
@@ -69,6 +70,7 @@
 		452B2049245866920054F952 /* ChildCheckBoxItemTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChildCheckBoxItemTableViewCell.xib; sourceTree = "<group>"; };
 		452B2051245866CD0054F952 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		452B205324586B160054F952 /* CheckBoxItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBoxItemTableViewCell.swift; sourceTree = "<group>"; };
+		455CB65B245BF75200C4B439 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		4572519124586DA9006FCEAA /* UICheckbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICheckbox.swift; sourceTree = "<group>"; };
 		45725193245870FD006FCEAA /* UIKit+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIKit+Extensions.swift"; sourceTree = "<group>"; };
 		45725195245872A0006FCEAA /* Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Row.swift; sourceTree = "<group>"; };
@@ -211,6 +213,7 @@
 				452B2051245866CD0054F952 /* Protocols.swift */,
 				457251A02458AFF1006FCEAA /* DefaultCheckboxStyle.swift */,
 				452B2042245865900054F952 /* MultiLevelList.swift */,
+				455CB65B245BF75200C4B439 /* Node.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 				452B20462458667E0054F952 /* ParentCheckboxItemTableViewCell.swift in Sources */,
 				45725194245870FD006FCEAA /* UIKit+Extensions.swift in Sources */,
 				452B2052245866CD0054F952 /* Protocols.swift in Sources */,
+				455CB65C245BF75200C4B439 /* Node.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
