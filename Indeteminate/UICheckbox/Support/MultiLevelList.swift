@@ -23,7 +23,7 @@ struct State {
 }
 
 /// List item models will conform to this protocol to
-/// be able to interface with the tree
+/// be able to interface with the tree data model.
 protocol SelectionReceiver: class {
     /// A getter method to ask for child models
     /// - Returns: `SelectionReceiver`

@@ -42,7 +42,7 @@ class ViewController: UIViewController {
         
         //3. Optionally observe for changes
         let cancellable = checkbox.selectionObserver.sink { (row) in
-//            print(row)
+            print(row)
         }
         
         //4. Make sure the cancellable is cached to make sure

@@ -9,22 +9,25 @@
 import Foundation
 import Combine
 
-protocol Selectable {
-    func select()
-}
 /// The class for caching all cell row state
 class Row: ReuseIdentifier {
     
+    /// Receives binary selection state from the UI
     @Published var selectReceiver: Bool = false
+    
+    /// Subject that obserbes
     var stateReceiver = PassthroughSubject<SelectionState, Never>()
     
-    weak var weakNode: Node?
-    
-    var cellIdentifier: String
-    var state: ChildVisibility = .collapsed
-    
+    /// Optional list of child rows
     var children: [Row]?
     
+    /// ID for the cell
+    var cellIdentifier: String
+    
+    /// A cache that refers to if the child rows are visible or not
+    var state: ChildVisibility = .collapsed
+   
+    private weak var weakNode: Node?
     private(set) var identifier = UUID().uuidString
     private(set) var title: String
     private(set) var currentState: SelectionState = .none
@@ -53,6 +56,13 @@ extension Row: Hashable {
     }
 }
 
+extension Row: CustomStringConvertible {
+    var description: String {
+        return "\(title) \(currentState))"
+    }
+}
+
+/// Conforms to the `SelectionReceiver` protocol
 extension Row: SelectionReceiver {
     var debugDescription: String? {
         return title
@@ -77,6 +87,5 @@ extension Row: SelectionReceiver {
     func didChange(state: SelectionState) {
         self.currentState = state
         self.stateReceiver.send(state)
-        print("\(title) \(state)")
     }
 }

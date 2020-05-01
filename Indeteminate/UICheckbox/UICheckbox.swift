@@ -86,9 +86,12 @@ class UICheckbox<T>: UIView, UITableViewDelegate where T: Labelable {
         let key = dict.key
           
             let row = Row(title: key, aClass: ParentCheckboxItemTableViewCell.self, referenceValue: key)
+            self.bindToObserver(row: row)
             
             row.children = dict.value.map { node in
                 let row = Row(title: node.title, aClass: ChildCheckBoxItemTableViewCell.self, referenceValue: dict.value)
+                
+                self.bindToObserver(row: row)
                 
                 return row
             }
@@ -96,6 +99,12 @@ class UICheckbox<T>: UIView, UITableViewDelegate where T: Labelable {
         }
     }
     
+    private func bindToObserver(row: Row) {
+        row.stateReceiver.sink { (state) in
+            self.selectionObserver.send(row)
+        }
+        .store(in: &store)
+    }
     private func addTableView() {
         tableView = UITableView(frame: .zero, style: .plain)
         tableView.delegate = self
