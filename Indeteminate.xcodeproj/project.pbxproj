@@ -28,7 +28,6 @@
 		4572519E24588819006FCEAA /* RootCheckBoxItemTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4572519C24588819006FCEAA /* RootCheckBoxItemTableViewCell.xib */; };
 		4572519F24588819006FCEAA /* RootCheckBoxItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572519D24588819006FCEAA /* RootCheckBoxItemTableViewCell.swift */; };
 		457251A12458AFF1006FCEAA /* DefaultCheckboxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457251A02458AFF1006FCEAA /* DefaultCheckboxStyle.swift */; };
-		457251A42458BDE9006FCEAA /* MultiLevelList+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457251A32458BDE9006FCEAA /* MultiLevelList+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,7 +75,6 @@
 		4572519C24588819006FCEAA /* RootCheckBoxItemTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RootCheckBoxItemTableViewCell.xib; sourceTree = "<group>"; };
 		4572519D24588819006FCEAA /* RootCheckBoxItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootCheckBoxItemTableViewCell.swift; sourceTree = "<group>"; };
 		457251A02458AFF1006FCEAA /* DefaultCheckboxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCheckboxStyle.swift; sourceTree = "<group>"; };
-		457251A32458BDE9006FCEAA /* MultiLevelList+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MultiLevelList+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,7 +211,6 @@
 				452B2051245866CD0054F952 /* Protocols.swift */,
 				457251A02458AFF1006FCEAA /* DefaultCheckboxStyle.swift */,
 				452B2042245865900054F952 /* MultiLevelList.swift */,
-				457251A32458BDE9006FCEAA /* MultiLevelList+Extensions.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -364,7 +361,6 @@
 				452B204A245866920054F952 /* ChildCheckBoxItemTableViewCell.swift in Sources */,
 				452B20462458667E0054F952 /* ParentCheckboxItemTableViewCell.swift in Sources */,
 				45725194245870FD006FCEAA /* UIKit+Extensions.swift in Sources */,
-				457251A42458BDE9006FCEAA /* MultiLevelList+Extensions.swift in Sources */,
 				452B2052245866CD0054F952 /* Protocols.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,15 +9,20 @@
 import Foundation
 import Combine
 
+protocol Selectable {
+    func select()
+}
 /// The class for caching all cell row state
 class Row: ReuseIdentifier {
     
     @Published var selectReceiver: Bool = false
-    @Published var isSelected: Bool = false
+    var stateReceiver = PassthroughSubject<SelectionState, Never>()
+    
+    weak var weakNode: Node?
     
     var cellIdentifier: String
     var state: ChildVisibility = .collapsed
-    var stateReceiver = PassthroughSubject<SelectionState, Never>()
+    
     var children: [Row]?
     
     private(set) var identifier = UUID().uuidString
@@ -35,15 +40,6 @@ class Row: ReuseIdentifier {
         self.cellIdentifier = String(describing: aClass)
         self.title = title
         self.referenceValue = referenceValue
-        bind()
-    }
-    
-    fileprivate func bind() {
-        self.stateReceiver.sink { (state) in
-            self.currentState = state
-            self.isSelected = state == .selected
-        }
-        .store(in: &store)
     }
 }
 
@@ -57,8 +53,30 @@ extension Row: Hashable {
     }
 }
 
-extension Row: CustomStringConvertible {
-    var description: String {
-        return "\(title) \(isSelected) -> \(referenceValue ?? "")"
+extension Row: SelectionReceiver {
+    var debugDescription: String? {
+        return title
+    }
+    
+    func link(node: Node) {
+        
+        // Set a weak reference
+        self.weakNode = node
+        
+        // Bind
+        $selectReceiver.sink { (isSelected) in
+            self.weakNode?.select(isSelected: isSelected)
+        }
+        .store(in: &store)
+    }
+    
+    func childNodes() -> [SelectionReceiver]? {
+        self.children
+    }
+    
+    func didChange(state: SelectionState) {
+        self.currentState = state
+        self.stateReceiver.send(state)
+        print("\(title) \(state)")
     }
 }

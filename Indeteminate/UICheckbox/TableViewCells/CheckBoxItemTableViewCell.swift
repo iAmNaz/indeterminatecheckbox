@@ -18,6 +18,7 @@ class CheckBoxItemTableViewCell: UITableViewCell, FieldCell {
         didSet {
             self.contentView.backgroundColor = style.defaultStyle()
             self.backgroundColorFor(model.currentState)
+            button.isSelected = model.currentState == .selected
         }
     }
     
@@ -25,14 +26,14 @@ class CheckBoxItemTableViewCell: UITableViewCell, FieldCell {
     
     var model: Row! {
         didSet {
-            model.stateReceiver.sink { [weak self] (state) in
+            model.stateReceiver
+                .removeDuplicates()
+                .sink { [weak self] (state) in
                 self?.backgroundColorFor(state)
+                self?.button.isSelected = state == .selected
             }.store(in: &store)
             
             self.label.text = model.title
-            model.$isSelected
-            .assign(to: \.isSelected, on: button)
-            .store(in: &store)
         }
     }
     

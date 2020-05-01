@@ -16,6 +16,18 @@ enum SelectionState {
     case indeterminate
 }
 
+struct State {
+    static var on = 1
+    static var off = 0
+}
+
+protocol SelectionReceiver: class {
+    func childNodes() -> [SelectionReceiver]?
+    func didChange(state: SelectionState)
+    func link(node: Node)
+    var debugDescription: String? { get }
+}
+
 /// The model that backs the checkbox
 class MultiLevelList<T> where T:Labelable {
     
@@ -23,32 +35,23 @@ class MultiLevelList<T> where T:Labelable {
     
     var store = Set<AnyCancellable>()
     
-    /// Use this initializer when node are created externally
-    init(title: String) {
-        self.root = Node(title: title)
+    init(root receiver: SelectionReceiver, list items: [SelectionReceiver]) {
+        
+        // Root Level
+        self.root = Node(data: receiver)
+
+        items.forEach { (parentRow) in
+            // Level 2
+            let parentNode = self.root.addChild(data: parentRow)
+                  
+            // Level 2 Children
+            if let childRows = parentRow.childNodes() {
+                for child in childRows {
+                    parentNode.addChild(data: child)
+                }
+            }
+        }
     }
-    
-    /// Use this initializer when you have an array of dictionary data
-    /// and let the list generate the nodes
-    init(title: String, items: [String:[T]]) {
-          
-          self.root = Node(title: title)
-          
-          for dict in items {
-              
-              let key = dict.key
-              
-              let subItems = dict.value
-              
-              let node = Node(title: key)
-    
-              self.root.addChild(child: node)
-              
-              for child in subItems {
-                  node.addChild(child: Node(title: child.title))
-              }
-          }
-      }
     
     func selectAll() {
         root.selectDownStream()
@@ -77,85 +80,79 @@ class Node {
     private var index: Int = 0
     private var parent: Node?
     private var childrenNodes:[Node]?
-    private var selected = 0
-    private var title: String
+    private var selected = State.off
+    private weak var weakReceiver: SelectionReceiver?
     
-    init(title: String) {
-        self.title = title
+    init(data: SelectionReceiver) {
+        data.link(node: self)
+        self.weakReceiver = data
     }
     
-    func addChild(child: Node) {
+    @discardableResult
+    func addChild(data: SelectionReceiver) -> Node {
+        
+        let child = Node(data: data)
+        
+        data.link(node: child)
+        
         if childrenNodes == nil {
             childrenNodes = [Node]()
         }
+        
         child.level = level + 1
         child.parent = self
         child.index = childrenNodes!.endIndex
         childrenNodes!.append(child)
+        return child
     }
     
-    func selectDownStream() {
-        parent?.selected = 1
-        state = .selected
+    func select(isSelected: Bool) {
+        if isSelected {
+            if isParent {
+                selectDownStream()
+            } else {
+                setSelected()
+            }
+        } else {
+            if isParent {
+                deselectDownStream()
+            } else {
+                deselect()
+            }
+        }
+    }
+    
+    fileprivate func selectDownStream() {
         childrenNodes?.forEach { node in
-            node.selected = 1
-            node.state = .selected
+            node.setSelected()
             node.selectDownStream()
         }
-        parent?.evalSelections()
     }
     
-    func deselectDownStream() {
-        parent?.selected = 0
-        state = .none
+    fileprivate func deselectDownStream() {
         childrenNodes?.forEach { node in
-            node.selected = 0
-            node.state = .none
+            node.deselect()
             node.deselectDownStream()
         }
-        parent?.evalSelections()
     }
     
-    func deselect() {
-        
-        selected = 0
-        
-        // Select upstream
-        parent?.deselect()
-        
-        guard let children = childrenNodes else {
-            state = .none
-            return
-        }
-        
-        //select downstream
-        evalSelections(children: children)
+    private func deselect() {
+        updateState(state: .none)
+        evalChildSelections()
     }
     
-    func setSelected() {
-        
-        selected = 1
-        
-        // Select upstream
-        parent?.setSelected()
-        
-        guard let children = childrenNodes else {
-            state = .selected
-            return
-        }
-        
-        //select downstream
-        evalSelections(children: children)
+    private func setSelected() {
+        updateState(state: .selected)
+        evalChildSelections()
     }
     
-    func debugPrintSelections() {
-        print("\(title) \(state) \(level) \(index)")
+    fileprivate func debugPrintSelections() {
         childrenNodes?.forEach {
             $0.debugPrintSelections()
         }
     }
     
-    private func evalSelections() {
+    private func evalChildSelections() {
         if let children = self.childrenNodes {
             let sum = children.reduce(0, { (result, node) -> Int in
                 result + node.selected
@@ -163,34 +160,40 @@ class Node {
             
             switch sum {
             case 0:
-                state = .none
+                updateState(state: . none)
             case children.count:
-                state = .selected
+                updateState(state: .selected)
             default:
-                state = .indeterminate
+                updateState(state: .indeterminate)
+                
             }
         }
+        parent?.evalChildSelections()
     }
     
-    private func evalSelections(children: [Node]) {
-        
-        let sum = children.reduce(0, { (result, node) -> Int in
-            result + node.selected
-        })
-        
-        switch sum {
-        case 0:
-            state = .none
-        case children.count:
-            state = .selected
-        default:
-            state = .indeterminate
+    func updateState(state: SelectionState) {
+        self.state = state
+        if state == .selected {
+            selected = State.on
+        } else {
+            selected = State.off
         }
+        
+        weakReceiver?.didChange(state: self.state)
     }
 }
 
 extension Node: CustomStringConvertible {
     var description: String {
-        return "\(title): \(String(describing: childrenNodes?.count))"
+        let tab = "\t"
+        var tabs = ""
+        
+        for _ in 0...level {
+            tabs += tab
+        }
+        
+        let desc = weakReceiver?.debugDescription ?? ""
+        
+        return "\(tabs) \(String(describing: desc))"
     }
 }

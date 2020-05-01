@@ -26,7 +26,7 @@ class ViewController: UIViewController {
         let sample = [
             "PARENT1": [Item(title: "item1"), Item(title: "item2")],
             "PARENT2": [Item(title: "item1"), Item(title: "item2")],
-            "PARENT3": [Item(title: "item1"), Item(title: "item2"), Item(title: "item3"),Item(title: "item4")],
+            "PARENT3": [Item(title: "item1"), Item(title: "item2"), Item(title: "item3")],
             "PARENT4": [Item(title: "item1"), Item(title: "item2"), Item(title: "item3"), Item(title: "item4")],
             "PARENT5": [Item(title: "item1"), Item(title: "item2")],
             "PARENT6": [Item(title: "item1"), Item(title: "item2"), Item(title: "item3"),Item(title: "item4")],
@@ -42,7 +42,7 @@ class ViewController: UIViewController {
         
         //3. Optionally observe for changes
         let cancellable = checkbox.selectionObserver.sink { (row) in
-            print(row)
+//            print(row)
         }
         
         //4. Make sure the cancellable is cached to make sure

@@ -46,11 +46,9 @@ class UICheckbox<T>: UIView, UITableViewDelegate where T: Labelable {
         
         root = Row(title: title, aClass: RootCheckBoxItemTableViewCell.self)
         
-        list = MultiLevelList(title: title)
-        
         fillItems(items: items)
         
-        list.customData(rootItem: root, items: allRowModels)
+        list = MultiLevelList(root: root, list: allRowModels)
     }
     
     func embedInContainer(container: UIView) {
@@ -91,10 +89,6 @@ class UICheckbox<T>: UIView, UITableViewDelegate where T: Labelable {
             
             row.children = dict.value.map { node in
                 let row = Row(title: node.title, aClass: ChildCheckBoxItemTableViewCell.self, referenceValue: dict.value)
-                row.$isSelected.sink { [weak self] (selected) in
-                    self?.selectionObserver.send(row)
-                }
-                .store(in: &store)
                 
                 return row
             }
