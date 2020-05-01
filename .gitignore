@@ -64,4 +64,3 @@ node_modules/
 # dotenv environment variables file
 .env
 *.xcuserstate
-UserInterfaceState.xcuserstate~d707851d9b3d337523e4a96bfcece76c17f0cfa9
